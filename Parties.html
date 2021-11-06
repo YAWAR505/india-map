@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Wrapping Long Labels</title>
+    <style>
+
+      .bar {
+        stroke-width:1px;
+		  stroke:#000;
+      }
+
+      .bar:hover {
+       
+      }
+      div.tooltip {
+      position: absolute;
+      text-align: left;
+      padding: 0.5em;
+      font-size: 12px;
+      color: #222;
+      background: #FFF;
+      border-radius: 2px;
+      pointer-events: none;
+      box-shadow: 0px 0px 2px 0px #a6a6a6;
+    }
+      .title {
+        font: bold 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+
+      .axis {
+        font: 10px sans-serif;
+      }
+
+      .axis path,
+      .axis line {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+
+      .x.axis path {
+        display: none;
+      }
+      .chart{
+        margin: 0 auto;
+        width: 1090px;
+        
+      }
+
+    </style>
+  </head>
+  <body>
+	  <div class="chart"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+    <script>
+var data=[
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "BJP",
+    "Party Name": "Bharatiya Janata Party",
+    "Contested": 436,
+    "Won": 303,
+    "Defeated": 51,
+    "Votes Secured By Party": 229076879,
+    "VoteShare": 37.762,
+    "Color": "#F98C1F",
+    "Party President": "",
+    "Symbol": "Lotus",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "INC",
+    "Party Name": "Indian National Congress",
+    "Contested": 421,
+    "Won": 52,
+    "Defeated": 148,
+    "Votes Secured By Party": 119495214,
+    "VoteShare": 19.6981,
+    "Color": "#00BFFF",
+    "Party President": "Sonia Gandhi",
+    "Symbol": "Hand",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "DMK",
+    "Party Name": "Dravida Munnetra Kazhagam",
+    "Contested": 23,
+    "Won": 23,
+    "Defeated": 0,
+    "Votes Secured By Party": 13877992,
+    "VoteShare": 2.2877,
+    "Color": "#000000",
+    "Party President": "M. K. Stalin",
+    "Symbol": "Rising Sun",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "AITC",
+    "Party Name": "All India Trinamool Congress",
+    "Contested": 62,
+    "Won": 22,
+    "Defeated": 20,
+    "Votes Secured By Party": 24929330,
+    "VoteShare": 4.1095,
+    "Color": "#3CB371",
+    "Party President": "Mamata Banerjee",
+    "Symbol": "Flowers and Grass",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "YSRCP",
+    "Party Name": "Yuvajana Sramika Rythu Congress Party",
+    "Contested": 25,
+    "Won": 22,
+    "Defeated": 0,
+    "Votes Secured By Party": 15537006,
+    "VoteShare": 2.5612,
+    "Color": "#1469c7",
+    "Party President": "Y. S. Vijayamma",
+    "Symbol": "Ceiling Fan",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "SHS",
+    "Party Name": "Shivsena",
+    "Contested": 23,
+    "Won": 18,
+    "Defeated": 0,
+    "Votes Secured By Party": 12589064,
+    "VoteShare": 2.0752,
+    "Color": "#f26f21",
+    "Party President": "Uddhav Thackeray",
+    "Symbol": "Bow and Arrow,Bow & Arrow,Bead Necklace,Bricks,Basket containing Fruits,Throwing a Javelin,Air Conditioner,FLUTE,Cup & Saucer,Ganna Kisan,Key,Cauliflower,Sewing Machine",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "JD(U)",
+    "Party Name": "Janata Dal  (United)",
+    "Contested": 17,
+    "Won": 16,
+    "Defeated": 0,
+    "Votes Secured By Party": 8902719,
+    "VoteShare": 1.4676,
+    "Color": "#29960C",
+    "Party President": "Nitish Kumar",
+    "Symbol": "Arrow,Air Conditioner",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "BJD",
+    "Party Name": "Biju Janata Dal",
+    "Contested": 21,
+    "Won": 12,
+    "Defeated": 0,
+    "Votes Secured By Party": 10174021,
+    "VoteShare": 1.6771,
+    "Color": "#026400",
+    "Party President": "Naveen Patnaik",
+    "Symbol": "Conch",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "BSP",
+    "Party Name": "Bahujan Samaj Party",
+    "Contested": 383,
+    "Won": 10,
+    "Defeated": 345,
+    "Votes Secured By Party": 22246501,
+    "VoteShare": 3.6672,
+    "Color": "#22409A",
+    "Party President": "Mayawati",
+    "Symbol": "Elephant",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "TRS",
+    "Party Name": "Telangana Rashtra Samithi",
+    "Contested": 17,
+    "Won": 9,
+    "Defeated": 1,
+    "Votes Secured By Party": 7696848,
+    "VoteShare": 1.2688,
+    "Color": "#FFC0CB",
+    "Party President": "K. Chandrashekar Rao",
+    "Symbol": "Car",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "LJP",
+    "Party Name": "Lok Jan Shakti Party",
+    "Contested": 6,
+    "Won": 6,
+    "Defeated": 0,
+    "Votes Secured By Party": 3206979,
+    "VoteShare": 0.5287,
+    "Color": "#0093dd",
+    "Party President": "Ram Vilas Paswan",
+    "Symbol": "Bungalow",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "SP",
+    "Party Name": "Samajwadi Party",
+    "Contested": 37,
+    "Won": 5,
+    "Defeated": 1,
+    "Votes Secured By Party": 15533620,
+    "VoteShare": 2.5606,
+    "Color": "#25803D",
+    "Party President": "Akhilesh Yadav",
+    "Symbol": "Bicycle,Air Conditioner,Helicopter,Tractor Chalata Kisan",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "NCP",
+    "Party Name": "Nationalist Congress Party",
+    "Contested": 34,
+    "Won": 5,
+    "Defeated": 14,
+    "Votes Secured By Party": 8500331,
+    "VoteShare": 1.4012,
+    "Color": "#00B2B2",
+    "Party President": "Sharad Pawar",
+    "Symbol": "Clock",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "Unrecognised/Registered",
+    "Party Abbre": "IND",
+    "Party Name": "Independent",
+    "Contested": 3443,
+    "Won": 4,
+    "Defeated": 3431,
+    "Votes Secured By Party": 16467341,
+    "VoteShare": 2.7145,
+    "Color": "#1F75FE",
+    "Party President": "",
+    "Symbol": "Balloon,Pot,Tractor Chalata Kisan,COCONUT FARM,Cauliflower,Key,Envelope,Ginger,Sewing Machine,Air Conditioner,Pen Nib with Seven Rays,Camera,Well,Glass Tumbler,Black Board,Football,Winnower,Almirah,Bottle,Bead Necklace,Tent,Pants,Batsman,Bat,Ganna Kisan,COMPUTER,BUCKET,Battery Torch,Scissors,Mike,Water Tank,Tiller,Cup & Saucer,Truck,Road Roller,Gas Cylinder,Helicopter,Auto- Rickshaw,Cot,Jackfruit,Boat with Man and Sail,Safety Pin,Whistle,Television,CCTV Camera,Pressure Cooker,Plate Containing Food,DIAMOND,Plastering Trowel,Saw,Kettle,Fountain,BOX,Carrom Board,Slate,Bangles,Chappals,Stapler,Bricks,Green Chilli,Electric Pole,Man Blowing Turha,Letter Box,Apple,HOCKEY & BALL,Ring,Table,Ear Rings,Telephone,Baby Walker,CUTTING PLIERS,Grapes,Gift Pack,T.V. Remote,Walking Stick,Bicycle Pump,Hat,Laptop,Ludo,Coat,Pan,Mixee,Matchbox,Pen Drive,Petrol Pump,BISCUIT,Nail Cutter,Helmet,Spanner,Brief Case,Stethoscope,SHIP,Chakki,Pineapple,Basket containing Fruits,Rubber Stamp,Chimney,Harmonium,Neck Tie,CHAPATI ROLLER,Dish Ant",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "TDP",
+    "Party Name": "Telugu Desam",
+    "Contested": 25,
+    "Won": 3,
+    "Defeated": 0,
+    "Votes Secured By Party": 12515345,
+    "VoteShare": 2.0631,
+    "Color": "#fcee22",
+    "Party President": "N. Chandrababu Naidu",
+    "Symbol": "Bicycle",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "CPI(M)",
+    "Party Name": "Communist Party of India  (Marxist)",
+    "Contested": 69,
+    "Won": 3,
+    "Defeated": 51,
+    "Votes Secured By Party": 10744908,
+    "VoteShare": 1.7712,
+    "Color": "#DE0000",
+    "Party President": "Sitaram Yechury",
+    "Symbol": "Hammer, Sickle and Star",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "JKN",
+    "Party Name": "Jammu & Kashmir National Conference",
+    "Contested": 3,
+    "Won": 3,
+    "Defeated": 0,
+    "Votes Secured By Party": 280356,
+    "VoteShare": 0.0462,
+    "Color": "#ff0000",
+    "Party President": "Farooq Abdullah",
+    "Symbol": "Plough",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "SAD",
+    "Party Name": "Shiromani Akali Dal",
+    "Contested": 10,
+    "Won": 2,
+    "Defeated": 0,
+    "Votes Secured By Party": 3778574,
+    "VoteShare": 0.6229,
+    "Color": "#ff9900",
+    "Party President": "Sukhbir Singh Badal",
+    "Symbol": "Scales",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "National",
+    "Party Abbre": "CPI",
+    "Party Name": "Communist Party of India",
+    "Contested": 49,
+    "Won": 2,
+    "Defeated": 41,
+    "Votes Secured By Party": 3576184,
+    "VoteShare": 0.5895,
+    "Color": "#DE0000",
+    "Party President": "Binoy Viswam",
+    "Symbol": "Ears of Corn And Sickle",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "IUML",
+    "Party Name": "Indian Union Muslim League",
+    "Contested": 2,
+    "Won": 2,
+    "Defeated": 0,
+    "Votes Secured By Party": 1111697,
+    "VoteShare": 0.1833,
+    "Color": "#009933",
+    "Party President": "K. M. Kader Mohideen",
+    "Symbol": "Ladder,Gas Cylinder,Auto- Rickshaw",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "Unrecognised/Registered",
+    "Party Abbre": "ADAL",
+    "Party Name": "Apna Dal (Soneylal)",
+    "Contested": 2,
+    "Won": 2,
+    "Defeated": 0,
+    "Votes Secured By Party": 1039478,
+    "VoteShare": 0.1714,
+    "Color": "#0040ff",
+    "Party President": "Anupriya Patel",
+    "Symbol": "Cup & Saucer",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "ADMK",
+    "Party Name": "All India Anna Dravida Munnetra Kazhagam",
+    "Contested": 21,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 7830146,
+    "VoteShare": 1.2908,
+    "Color": "#007500",
+    "Party President": "E. Madhusudhanan",
+    "Symbol": "Two Leaves",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "JD(S)",
+    "Party Name": "Janata Dal  (Secular)",
+    "Contested": 7,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 3397229,
+    "VoteShare": 0.56,
+    "Color": "#2E8B57",
+    "Party President": "H. D. Deve Gowda",
+    "Symbol": "A lady farmer carrying paddy on her head",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "AAAP",
+    "Party Name": "Aam Aadmi Party",
+    "Contested": 20,
+    "Won": 1,
+    "Defeated": 15,
+    "Votes Secured By Party": 2587460,
+    "VoteShare": 0.4265,
+    "Color": "#0066a4",
+    "Party President": "Arvind Kejriwal",
+    "Symbol": "Broom",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "JMM",
+    "Party Name": "Jharkhand Mukti Morcha",
+    "Contested": 4,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 1722635,
+    "VoteShare": 0.284,
+    "Color": "#004B1F",
+    "Party President": "Shibu Soren",
+    "Symbol": "Throwing a Javelin,Lady Purse,Bow & Arrow,Almirah,Auto- Rickshaw,Football,FLUTE",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "AIUDF",
+    "Party Name": "All India United Democratic Front",
+    "Contested": 3,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 1402088,
+    "VoteShare": 0.2311,
+    "Color": "#348017",
+    "Party President": "Badruddin Ajmal",
+    "Symbol": "Lock and Key",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "RSP",
+    "Party Name": "Revolutionary Socialist Party",
+    "Contested": 5,
+    "Won": 1,
+    "Defeated": 4,
+    "Votes Secured By Party": 707952,
+    "VoteShare": 0.1167,
+    "Color": "#ff4a4a",
+    "Party President": "Manoj Bhattacharya",
+    "Symbol": "Spade & Stoker",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "Unrecognised/Registered",
+    "Party Abbre": "RLTP",
+    "Party Name": "Rashtriya Loktantrik Party",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 660051,
+    "VoteShare": 0.1088,
+    "Color": "#ccff66",
+    "Party President": "Vishal saini",
+    "Symbol": "Tyres",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "AJSUP",
+    "Party Name": "AJSU Party",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 648277,
+    "VoteShare": 0.1069,
+    "Color": "#FF33FF",
+    "Party President": "Sudesh Mahto",
+    "Symbol": "Banana",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "AIMIM",
+    "Party Name": "All India Majlis-E-Ittehadul Muslimeen",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 517471,
+    "VoteShare": 0.0853,
+    "Color": "#048000",
+    "Party President": "Asaduddin Owaisi",
+    "Symbol": "Kite",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "Unrecognised/Registered",
+    "Party Abbre": "VCK",
+    "Party Name": "Viduthalai Chiruthaigal Katchi",
+    "Contested": 6,
+    "Won": 1,
+    "Defeated": 5,
+    "Votes Secured By Party": 507261,
+    "VoteShare": 0.0836,
+    "Color": "#1E90FF",
+    "Party President": "Thol. Thirumavalavan",
+    "Symbol": "Pot,Stool,COCONUT FARM",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "NDPP",
+    "Party Name": "Nationalist Democratic Progressive Party",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 500510,
+    "VoteShare": 0.0825,
+    "Color": "#cc6600",
+    "Party President": "Chingwang Konyak",
+    "Symbol": "Globe",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "KEC(M)",
+    "Party Name": "Kerala Congress  (M)",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 421046,
+    "VoteShare": 0.0694,
+    "Color": "#CC9900",
+    "Party President": "K. M. Mani",
+    "Symbol": "Two Leaves",
+    "Alliance": "UPA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "NPF",
+    "Party Name": "Naga Peoples Front",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 363527,
+    "VoteShare": 0.0599,
+    "Color": "#281670",
+    "Party President": "T. R. Zeliang",
+    "Symbol": "Cock",
+    "Alliance": "OTH"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "NPEP",
+    "Party Name": "National People's Party",
+    "Contested": 3,
+    "Won": 1,
+    "Defeated": 2,
+    "Votes Secured By Party": 350178,
+    "VoteShare": 0.0577,
+    "Color": "#cc0099",
+    "Party President": "Conrad Sangma",
+    "Symbol": "Book",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "MNF",
+    "Party Name": "Mizo National Front",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 224286,
+    "VoteShare": 0.037,
+    "Color": "#2e5694",
+    "Party President": "Zoramthanga",
+    "Symbol": "Star",
+    "Alliance": "NDA"
+  },
+  {
+    "Year": 2019,
+    "Type": "State",
+    "Party Abbre": "SKM",
+    "Party Name": "Sikkim Krantikari Morcha",
+    "Contested": 1,
+    "Won": 1,
+    "Defeated": 0,
+    "Votes Secured By Party": 166922,
+    "VoteShare": 0.0275,
+    "Color": "#ff5050",
+    "Party President": "Prem Singh Tamang",
+    "Symbol": "Table Lamp",
+    "Alliance": "OTH"
+  }
+]
+ 
+      var margin = {top: 80, right: 0, bottom: 80, left: 50},
+		   width = parseInt(d3.select(".chart").style("width")) - margin.left - margin.right,
+    
+        height = 600 - margin.top - margin.bottom;
+
+		
+      var padding = 0.01, outerPadding = 0,
+        x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], padding, outerPadding)
+     
+
+      var y = d3.scale.linear()
+	    .range([height, 0]);
+
+      var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        // .style("opacity",0);
+
+      var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        // .style("opacity",0);
+        .ticks(8, "%")
+
+      var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var div = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+     /* d3.tsv("data.tsv", type, function (error, data) {*/
+        var a = alpha(data, v),	  //scale factor between VoteShare and bar width
+          mid = Midi(data, v, a),	//mid-point displacement of bar i
+          w = Wi(data, v, a);		  //width of bar i
+
+        x.range(data.map(mid));	//force irregular intervals based on VoteShare
+
+        x.domain(data.map(function (d) {
+          return d.VoteShare;
+        }));
+        y.domain([0, d3.max(data, v)]);
+
+      
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .style("opacity",0)
+		.selectAll("text")
+    .attr("y", 0)
+    .attr("x", 9)
+    .attr("dy", ".35em")
+    .attr("transform", "rotate(90)")
+    .style("text-anchor", "start");
+          
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .style("opacity",0);
+
+        svg.selectAll(".bar")
+          .data(data)
+          .enter().append("rect")
+          
+          .attr("x", function (d, i) {
+            return x(d.VoteShare);	
+          })
+          .attr("width", x.rangeBand() || function (d) {
+            return a * d.VoteShare;	
+          }) 
+          .attr("y", function (d) { return y(d.Year);})
+          .attr("height", function (d) {return height - y(d.Year);})
+		  .attr("fill", function (d) { return (d.Color) })
+		  .attr("class", "bar")
+      .on('mouseover', function (d, i) {
+          d3.select(this).transition().duration(300)
+          .style("opacity", 5);
+          div.transition().duration(300)
+            .style("opacity", 1)
+          div.html(("VoteShare :"+d.VoteShare + " , "
+            // + "<br> Constituency Name : " + d.properties.constituencyName
+            
+
+          ))
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 30) + "px");
+        })
+
+        .on("mouseout", function (d) {
+                    div.transition()
+                        .duration(500)
+                        .style("opacity", 0)
+                       
+                })
+
+
+     
+      function v(d) {
+        return +d.VoteShare;
+      }
+      function alpha(VoteShares, VoteShare) {
+        var n = VoteShares.length, total = d3.sum(VoteShares, VoteShare);
+        return (width - (n - 0) * padding * width / n - 0 * outerPadding * width / n) / total
+      }
+      function Wi(VoteShares, VoteShare, alpha) {
+        return function (i) {
+          return VoteShare(VoteShares[i]) * alpha
+        }
+      }
+      function Midi(VoteShares, VoteShare, alpha) {
+        var w = Wi(VoteShares, VoteShare, alpha), n = VoteShares.length;
+        return function (_, i) {
+          var op = outerPadding * width / n, p = padding * width / n;
+          return op + d3.sum(VoteShares.slice(0, i), VoteShare) * alpha + i * p + w(i) / 500;
+        }
+      }
+    </script>
+  </body>
+</html>
